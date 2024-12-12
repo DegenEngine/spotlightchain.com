@@ -233,6 +233,18 @@
             transform: translateX(5px);
         }
 
+        .mouse-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            border-radius: 50%;
+            background: var(--accent);
+            opacity: 0.3;
+            mix-blend-mode: screen;
+            z-index: 9999;
+        }
+
         @media (max-width: 768px) {
             h1 { font-size: 2.5rem; }
             .features { grid-template-columns: 1fr; }
@@ -281,6 +293,11 @@
     </div>
 
     <script>
+        const trail = document.createElement("div");
+        trail.className = "mouse-trail";
+        document.body.appendChild(trail);
+
+
         // Add smooth scroll animation
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
@@ -293,6 +310,10 @@
 
         // Add parallax effect to feature cards
         document.addEventListener('mousemove', (e) => {
+            requestAnimationFrame(() => {
+                trail.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+            });
+
             document.querySelectorAll('.feature-card').forEach(card => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
